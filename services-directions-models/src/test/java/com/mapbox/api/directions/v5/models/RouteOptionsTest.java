@@ -1,8 +1,16 @@
 package com.mapbox.api.directions.v5.models;
 
+import androidx.annotation.NonNull;
 import com.mapbox.geojson.Point;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import static com.mapbox.api.directions.v5.DirectionsCriteria.ANNOTATION_CONGESTION;
@@ -13,11 +21,15 @@ import static com.mapbox.api.directions.v5.DirectionsCriteria.ANNOTATION_SPEED;
 import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_CURB;
 import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_UNRESTRICTED;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class RouteOptionsTest {
 
   private static final String ROUTE_OPTIONS_JSON =
-      "{\"baseUrl\":\"https://api.mapbox.com\",\"user\":\"mapbox\",\"profile\":\"driving-traffic\",\"coordinates\":[[-122.4003312,37.7736941],[-122.4187529,37.7689715],[-122.4255172,37.7775835]],\"alternatives\":false,\"language\":\"ru\",\"radiuses\":\";unlimited;100\",\"bearings\":\"0,90;90,0;\",\"continue_straight\":false,\"roundabout_exits\":false,\"geometries\":\"polyline6\",\"overview\":\"full\",\"steps\":true,\"annotations\":\"congestion,distance,duration\",\"exclude\":\"toll\",\"voice_instructions\":true,\"banner_instructions\":true,\"voice_units\":\"metric\",\"access_token\":\"token\",\"uuid\":\"12345543221\",\"approaches\":\";curb;\",\"waypoints\":\"0;1;2\",\"waypoint_names\":\";two;\",\"waypoint_targets\":\";12.2,21.2;\"}";
+      "{\"baseUrl\":\"https://api.mapbox.com\",\"user\":\"mapbox\",\"profile\":\"driving-traffic\",\"coordinates\":[[-122.4003312,37.7736941],[-122.4187529,37.7689715],[-122.4255172,37.7775835]],\"alternatives\":false,\"language\":\"ru\",\"radiuses\":\";unlimited;100\",\"bearings\":\"0,90;90,0;\",\"continue_straight\":false,\"roundabout_exits\":false,\"geometries\":\"polyline6\",\"overview\":\"full\",\"steps\":true,\"annotations\":\"congestion,distance,duration\",\"exclude\":\"toll\",\"voice_instructions\":true,\"banner_instructions\":true,\"voice_units\":\"metric\",\"access_token\":\"token\",\"uuid\":\"12345543221\",\"approaches\":\";curb;\",\"waypoints\":\"0;1;2\",\"waypoint_names\":\";two;\",\"waypoint_targets\":\";12.2,21.2;\",\"arrive_by\":\"2020-09-22T9:40\",\"depart_at\":\"2020-09-22T9:48\"}";
+
+  private Date arriveBy = new Date(1600756803000L); // 2020 Sep 22, 6:40:03 UTC
+  private Date departAt = new Date(1600757281000L); // 2020 Sep 22, 6:48:01 UTC
 
   @Test
   public void toBuilder() {
@@ -572,6 +584,26 @@ public class RouteOptionsTest {
   }
 
   @Test
+  public void arriveByIsValid_fromJson() {
+    RouteOptions options = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(
+            TimeUnit.MILLISECONDS.toMinutes(arriveBy.getTime()),
+            TimeUnit.MILLISECONDS.toMinutes(options.arriveBy().getTime())
+    );
+  }
+
+  @Test
+  public void departAtIsValid_fromJson() {
+    RouteOptions options = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(
+            TimeUnit.MILLISECONDS.toMinutes(departAt.getTime()),
+            TimeUnit.MILLISECONDS.toMinutes(options.departAt().getTime())
+    );
+  }
+
+  @Test
   public void routeOptions_toJson() {
     RouteOptions options = routeOptions();
 
@@ -742,6 +774,8 @@ public class RouteOptionsTest {
         .waypointIndices("0;1;2")
         .waypointNames(";two;")
         .waypointTargets(";12.2,21.2;")
+        .arriveBy(arriveBy)
+        .departAt(departAt)
         .build();
   }
 }

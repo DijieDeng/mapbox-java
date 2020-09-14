@@ -5,7 +5,9 @@ import androidx.annotation.Nullable;
 import com.mapbox.geojson.Point;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -13,6 +15,13 @@ import java.util.Locale;
  * Methods to convert models to Strings.
  */
 public class FormatUtils {
+
+  /**
+   * Date-time <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a> pattern.
+   */
+  public static final String ISO_8601_PATTERN = "yyyy-MM-dd'T'HH:mm";
+  private static final SimpleDateFormat ISO_8601_FORMAT = new SimpleDateFormat(ISO_8601_PATTERN);
+
   /**
    * Returns a string containing the tokens joined by delimiters. Doesn't remove trailing nulls.
    *
@@ -253,5 +262,20 @@ public class FormatUtils {
       }
     }
     return join(";", coordinatesToJoin);
+  }
+
+  /**
+   * Format {@link Date} to <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a> Date-Time
+   * format.
+   *
+   * @param date that has to be formatted
+   */
+  @Nullable
+  public static String formatDateToIso8601DateTime(@Nullable Date date) {
+    if (date == null) {
+      return null;
+    } else {
+      return ISO_8601_FORMAT.format(date);
+    }
   }
 }

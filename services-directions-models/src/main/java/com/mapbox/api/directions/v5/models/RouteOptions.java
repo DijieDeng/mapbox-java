@@ -15,6 +15,8 @@ import com.mapbox.api.directions.v5.utils.FormatUtils;
 import com.mapbox.api.directions.v5.utils.ParseUtils;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.PointAsCoordinatesTypeAdapter;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -494,6 +496,32 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract WalkingOptions walkingOptions();
 
   /**
+   * The departure time, the local time at the route <b>origin</b>.
+   * The travel time returned in duration is a prediction for travel time based
+   * on historical travel data. The route is calculated in a time-dependent manner.
+   * <p>For example, a trip that takes two hours will consider changing historic traffic conditions
+   * across the two-hour window, instead of only at the specified {@link #departAt()} time.
+   * <p>The route takes timed turn restrictions and conditional access restrictions into account
+   * based on the requested departure time.
+   */
+  @SerializedName("depart_at")
+  @Nullable
+  public abstract Date departAt();
+
+  /**
+   * The desired arrival time, the local time at the route <b>destination</b>.
+   * The travel time returned in duration is a prediction for travel
+   * time based on historical travel data. The route is calculated in a time-dependent manner.
+   * <p>For example, a trip that takes two hours will consider changing historic traffic conditions
+   * across the two-hour window.
+   * <p>The route takes timed turn restrictions and conditional access
+   * restrictions into account based on the requested arrival time.
+   */
+  @SerializedName("arrive_by")
+  @Nullable
+  public abstract Date arriveBy();
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
@@ -518,6 +546,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
     gson.registerTypeAdapterFactory(WalkingOptionsAdapterFactory.create());
+    gson.setDateFormat(FormatUtils.ISO_8601_PATTERN);
     return gson.create().fromJson(json, RouteOptions.class);
   }
 
@@ -1028,6 +1057,35 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @since 4.8.0
      */
     public abstract Builder walkingOptions(@NonNull WalkingOptions walkingOptions);
+
+    /**
+     * The departure time, the local time at the route <b>origin</b>.
+     * The travel time returned in duration is a prediction for travel time based
+     * on historical travel data. The route is calculated in a time-dependent manner.
+     * <p>For example, a trip that takes two hours will consider changing historic traffic
+     * conditions across the two-hour window, instead of only at the specified
+     * {@link #departAt(Date)} time.
+     * <p>The route takes timed turn restrictions and conditional access restrictions into account
+     * based on the requested departure time.
+     *
+     * @param departAt departure {@link Date}
+     * @return this builder for chaining options together
+     */
+    public abstract Builder departAt(@Nullable Date departAt);
+
+    /**
+     * The desired arrival time, the local time at the route <b>destination</b>.
+     * The travel time returned in duration is a prediction for travel
+     * time based on historical travel data. The route is calculated in a time-dependent manner.
+     * <p>For example, a trip that takes two hours will consider changing historic traffic
+     * conditions across the two-hour window.
+     * <p>The route takes timed turn restrictions and conditional access
+     * restrictions into account based on the requested arrival time.
+     *
+     * @param arriveBy arrive {@link Date}
+     * @return this builder for chaining options together
+     */
+    public abstract Builder arriveBy(@Nullable Date arriveBy);
 
     /**
      * Builds a new instance of the {@link RouteOptions} object.

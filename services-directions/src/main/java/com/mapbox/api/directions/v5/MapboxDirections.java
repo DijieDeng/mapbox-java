@@ -26,6 +26,7 @@ import com.mapbox.geojson.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -111,7 +112,9 @@ public abstract class MapboxDirections extends
       enableRefresh(),
       walkingSpeed(),
       walkwayBias(),
-      alleyBias()
+      alleyBias(),
+      FormatUtils.formatDateToIso8601DateTime(arriveBy()),
+      FormatUtils.formatDateToIso8601DateTime(departAt())
     );
   }
 
@@ -143,7 +146,9 @@ public abstract class MapboxDirections extends
       enableRefresh(),
       walkingSpeed(),
       walkwayBias(),
-      alleyBias()
+      alleyBias(),
+      FormatUtils.formatDateToIso8601DateTime(arriveBy()),
+      FormatUtils.formatDateToIso8601DateTime(departAt())
     );
   }
 
@@ -310,6 +315,12 @@ public abstract class MapboxDirections extends
 
   @Nullable
   abstract WalkingOptions walkingOptions();
+
+  @Nullable
+  abstract Date arriveBy();
+
+  @Nullable
+  abstract Date departAt();
 
   @Nullable
   Double walkingSpeed() {
@@ -1097,6 +1108,42 @@ public abstract class MapboxDirections extends
 
     abstract WalkingOptions walkingOptions();
 
+    /**
+     * The desired arrival time, the local time at the route <b>destination</b>.
+     * The travel time returned in duration is a prediction for travel
+     * time based on historical travel data. The route is calculated in a time-dependent manner.
+     * <p>For example, a trip that takes two hours will consider changing historic traffic
+     * conditions across the two-hour window.
+     * <p>The route takes timed turn restrictions and conditional access
+     * restrictions into account based on the requested arrival time.
+     *
+     * @param arriveBy arrive {@link Date}
+     * @return this builder for chaining options together
+     */
+    public abstract Builder arriveBy(@Nullable Date arriveBy);
+
+    @Nullable
+    abstract Date arriveBy();
+
+
+    /**
+     * The departure time, the local time at the route <b>origin</b>.
+     * The travel time returned in duration is a prediction for travel time based
+     * on historical travel data. The route is calculated in a time-dependent manner.
+     * <p>For example, a trip that takes two hours will consider changing historic traffic
+     * conditions across the two-hour window, instead of only at the specified
+     * {@link #departAt(Date)} time.
+     * <p>The route takes timed turn restrictions and conditional access restrictions into account
+     * based on the requested departure time.
+     *
+     * @param departAt departure {@link Date}
+     * @return this builder for chaining options together
+     */
+    public abstract Builder departAt(@Nullable Date departAt);
+
+    @Nullable
+    abstract Date departAt();
+
     abstract Builder usePostMethod(@NonNull Boolean usePost);
 
     abstract Boolean usePostMethod();
@@ -1105,8 +1152,8 @@ public abstract class MapboxDirections extends
 
     /**
      * This uses the provided parameters set using the {@link Builder} and first checks that all
-     * values are valid, formats the values as strings for easier consumption by the API, and lastly
-     * creates a new {@link MapboxDirections} object with the values provided.
+     * values are valid, formats the values as strings for easier consumption by the API, and
+     * lastly creates a new {@link MapboxDirections} object with the values provided.
      *
      * @return a new instance of Mapbox Directions
      * @since 2.1.0
