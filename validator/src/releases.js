@@ -24,9 +24,8 @@ module.exports = {
         const path = "mapbox/mapbox/com/mapbox/mapboxsdk/mapbox-sdk-services"
         const query = `${release}/mapbox-sdk-services-${release}.jar`
         const url = `https://dl.bintray.com/${path}/${query}`
-
         const util = require('util')
-        
+        console.log(url)
         
         async function write(response) {
             const streamPipeline = util.promisify(require('stream').pipeline)
