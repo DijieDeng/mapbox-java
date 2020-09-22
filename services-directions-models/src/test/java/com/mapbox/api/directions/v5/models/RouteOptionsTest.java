@@ -26,10 +26,10 @@ import static org.junit.Assert.assertTrue;
 public class RouteOptionsTest {
 
   private static final String ROUTE_OPTIONS_JSON =
-      "{\"baseUrl\":\"https://api.mapbox.com\",\"user\":\"mapbox\",\"profile\":\"driving-traffic\",\"coordinates\":[[-122.4003312,37.7736941],[-122.4187529,37.7689715],[-122.4255172,37.7775835]],\"alternatives\":false,\"language\":\"ru\",\"radiuses\":\";unlimited;100\",\"bearings\":\"0,90;90,0;\",\"continue_straight\":false,\"roundabout_exits\":false,\"geometries\":\"polyline6\",\"overview\":\"full\",\"steps\":true,\"annotations\":\"congestion,distance,duration\",\"exclude\":\"toll\",\"voice_instructions\":true,\"banner_instructions\":true,\"voice_units\":\"metric\",\"access_token\":\"token\",\"uuid\":\"12345543221\",\"approaches\":\";curb;\",\"waypoints\":\"0;1;2\",\"waypoint_names\":\";two;\",\"waypoint_targets\":\";12.2,21.2;\",\"arrive_by\":\"2020-09-22T9:40\",\"depart_at\":\"2020-09-22T9:48\"}";
+      "{\"baseUrl\":\"https://api.mapbox.com\",\"user\":\"mapbox\",\"profile\":\"driving-traffic\",\"coordinates\":[[-122.4003312,37.7736941],[-122.4187529,37.7689715],[-122.4255172,37.7775835]],\"alternatives\":false,\"language\":\"ru\",\"radiuses\":\";unlimited;100\",\"bearings\":\"0,90;90,0;\",\"continue_straight\":false,\"roundabout_exits\":false,\"geometries\":\"polyline6\",\"overview\":\"full\",\"steps\":true,\"annotations\":\"congestion,distance,duration\",\"exclude\":\"toll\",\"voice_instructions\":true,\"banner_instructions\":true,\"voice_units\":\"metric\",\"access_token\":\"token\",\"uuid\":\"12345543221\",\"approaches\":\";curb;\",\"waypoints\":\"0;1;2\",\"waypoint_names\":\";two;\",\"waypoint_targets\":\";12.2,21.2;\",\"depart_at\":\"2020-09-22T09:48\",\"arrive_by\":\"2020-09-22T09:40\"}";
 
-  private Date arriveBy = new Date(1600756803000L); // 2020 Sep 22, 6:40:03 UTC
-  private Date departAt = new Date(1600757281000L); // 2020 Sep 22, 6:48:01 UTC
+  private Date arriveBy = new Date(1600756803000L); // 2020 Sep 22, 06:40:03 UTC
+  private Date departAt = new Date(1600757281000L); // 2020 Sep 22, 06:48:01 UTC
 
   @Test
   public void toBuilder() {
