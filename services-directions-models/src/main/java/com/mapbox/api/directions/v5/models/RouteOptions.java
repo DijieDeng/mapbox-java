@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.mapbox.api.directions.v5.DateAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.WalkingOptions;
@@ -75,7 +76,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * <tt>MapboxDirections</tt> requesting object doesn't specifically set a profile.
    *
    * @return string value representing the profile defined in
-   *         {@link DirectionsCriteria.ProfileCriteria}
+   *   {@link DirectionsCriteria.ProfileCriteria}
    * @since 3.0.0
    */
   @NonNull
@@ -282,16 +283,16 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   /**
    * Exclude certain road types from routing. The default is to not exclude anything from the
    * profile selected. The following exclude flags are available for each profile:
-   *
+   * <p>
    * {@link DirectionsCriteria#PROFILE_DRIVING}: One of {@link DirectionsCriteria#EXCLUDE_TOLL},
    * {@link DirectionsCriteria#EXCLUDE_MOTORWAY}, or {@link DirectionsCriteria#EXCLUDE_FERRY}.
-   *
+   * <p>
    * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}: One of
    * {@link DirectionsCriteria#EXCLUDE_TOLL}, {@link DirectionsCriteria#EXCLUDE_MOTORWAY}, or
    * {@link DirectionsCriteria#EXCLUDE_FERRY}.
-   *
+   * <p>
    * {@link DirectionsCriteria#PROFILE_WALKING}: No excludes supported
-   *
+   * <p>
    * {@link DirectionsCriteria#PROFILE_CYCLING}: {@link DirectionsCriteria#EXCLUDE_FERRY}
    *
    * @return a string matching one of the {@link DirectionsCriteria.ExcludeCriteria} exclusions
@@ -433,7 +434,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * coordinates. The first value in the list corresponds to the route origin, not the first
    * destination.
    * Must be used in conjunction with {@link RouteOptions#steps()} = true.
-   * @return  a string representing names for each waypoint
+   *
+   * @return a string representing names for each waypoint
    * @since 3.3.0
    */
   @SerializedName("waypoint_names")
@@ -449,7 +451,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * destination.
    * Must be used in conjunction with {@link RouteOptions#steps()} = true.
    *
-   * @return  a list of strings representing names for each waypoint
+   * @return a list of strings representing names for each waypoint
    */
   @Nullable
   public List<String> waypointNamesList() {
@@ -464,7 +466,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * The maneuver.modifier, banner and voice instructions will be updated with the computed
    * side of street. The number of waypoint targets must be the same as the number of coordinates.
    * Must be used with {@link RouteOptions#steps()} = true.
-   * @return  a list of Points representing coordinate pairs for drop-off locations
+   *
+   * @return a list of Points representing coordinate pairs for drop-off locations
    * @since 4.3.0
    */
   @SerializedName("waypoint_targets")
@@ -479,7 +482,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * The maneuver.modifier, banner and voice instructions will be updated with the computed
    * side of street. The number of waypoint targets must be the same as the number of coordinates.
    * Must be used with {@link RouteOptions#steps()} = true.
-   * @return  a list of Points representing coordinate pairs for drop-off locations
+   *
+   * @return a list of Points representing coordinate pairs for drop-off locations
    */
   @Nullable
   public List<Point> waypointTargetsList() {
@@ -546,7 +550,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
     gson.registerTypeAdapterFactory(WalkingOptionsAdapterFactory.create());
-    gson.setDateFormat(FormatUtils.ISO_8601_PATTERN);
+    gson.registerTypeAdapter(Date.class, new DateAdapter());
     return gson.create().fromJson(json, RouteOptions.class);
   }
 
@@ -750,7 +754,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @since 3.1.0
      */
     public abstract Builder geometries(
-        @NonNull @DirectionsCriteria.GeometriesCriteria String geometries);
+      @NonNull @DirectionsCriteria.GeometriesCriteria String geometries);
 
     /**
      * Displays the requested type of overview geometry. Can be
@@ -805,7 +809,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * {@link DirectionsCriteria#ANNOTATION_SPEED}
      * {@link DirectionsCriteria#ANNOTATION_CONGESTION}
      * {@link DirectionsCriteria#ANNOTATION_MAXSPEED}
-     *
+     * <p>
      * See the {@link RouteLeg} object for more details on what is included with
      * annotations.
      * Must be used in conjunction with overview=full.
@@ -877,16 +881,16 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     /**
      * Exclude certain road types from routing. The default is to not exclude anything from the
      * profile selected. The following exclude flags are available for each profile:
-     *
+     * <p>
      * {@link DirectionsCriteria#PROFILE_DRIVING}: One of {@link DirectionsCriteria#EXCLUDE_TOLL},
      * {@link DirectionsCriteria#EXCLUDE_MOTORWAY}, or {@link DirectionsCriteria#EXCLUDE_FERRY}.
-     *
+     * <p>
      * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}: One of
      * {@link DirectionsCriteria#EXCLUDE_TOLL}, {@link DirectionsCriteria#EXCLUDE_MOTORWAY}, or
      * {@link DirectionsCriteria#EXCLUDE_FERRY}.
-     *
+     * <p>
      * {@link DirectionsCriteria#PROFILE_WALKING}: No excludes supported
-     *
+     * <p>
      * {@link DirectionsCriteria#PROFILE_CYCLING}: {@link DirectionsCriteria#EXCLUDE_FERRY}
      *
      * @param exclude a string matching one of the {@link DirectionsCriteria.ExcludeCriteria}

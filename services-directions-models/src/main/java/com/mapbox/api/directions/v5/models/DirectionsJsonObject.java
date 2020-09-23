@@ -1,13 +1,14 @@
 package com.mapbox.api.directions.v5.models;
 
 import com.google.gson.GsonBuilder;
+import com.mapbox.api.directions.v5.DateAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.WalkingOptionsAdapterFactory;
-import com.mapbox.api.directions.v5.utils.FormatUtils;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.PointAsCoordinatesTypeAdapter;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Provides a base class for Directions model classes.
@@ -28,7 +29,7 @@ public class DirectionsJsonObject implements Serializable {
     gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
     gson.registerTypeAdapterFactory(WalkingOptionsAdapterFactory.create());
-    gson.setDateFormat(FormatUtils.ISO_8601_PATTERN);
+    gson.registerTypeAdapter(Date.class, new DateAdapter());
     return gson.create().toJson(this);
   }
 }
