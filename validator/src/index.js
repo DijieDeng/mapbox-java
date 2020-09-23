@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
-const api = require('./releases')
+const releases = require('./releases')
+const download = require('./download')
 const runner = require('./runner')
 
 const argv = require('yargs')
     .command('list-releases', 'Request available versions', (argv) => {
-        api.listReleases(releases => {
+        releases.listReleases(releases => {
             console.log(releases)
         });
     })
@@ -15,12 +16,12 @@ const argv = require('yargs')
             type: 'string'
         });
     }, handler = (argv) => {
-        api.downloadRelease(argv.release);
+        download.downloadRelease(argv.release);
     })
     .command('download-all', 'Download all the releases', (argv) => {
-        api.listReleases(releases => {
+        releases.listReleases(releases => {
             releases.forEach(element => {
-                api.downloadRelease(element)
+                download.downloadRelease(element)
             });
         });
     })
@@ -42,10 +43,8 @@ const argv = require('yargs')
             type: 'string'
         });
     }, handler = (argv) => {
-        api.listReleases(releases => {
-            releases.forEach(element => {
-                runner.validateJson(element, argv.file);
-            });
+        releases.listReleases(releases => {
+            runner.validateJsonAll(releases, argv.file);
         });
     })
     .help()
